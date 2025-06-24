@@ -3,6 +3,7 @@
 ## main.py - Setup inicial
 
 ```python
+
 import os
 import time
 from etl.extractor import RepositoryData
@@ -19,10 +20,7 @@ if not os.path.exists('data'):
     os.makedirs('data')
     print("Pasta 'data' criada para salvar arquivos.")
 
-main.py - Parte 2: Preparar uploader e criar repositório no GitHub
-python
-Copiar
-Editar
+#main.py - Preparar uploader e criar repositório no GitHub
 try:
     uploader = RepositoryUploader(GITHUB_USER)
     uploader.create_repository(REPO_NAME)
@@ -36,9 +34,7 @@ Inicializamos o uploader, que será responsável por enviar os arquivos para o G
 
 ## main.py - Para cada usuário, extrair, salvar e enviar dados
 ```python
-python
-Copiar
-Editar
+
 for user in USERS:
     print(f"Processando: {user}")
 
@@ -70,9 +66,6 @@ Para cada usuário da lista, criamos um extrator e coletamos os dados em um Data
 
 ## etl/extractor.py - Inicializando classe para pegar dados do GitHub
 ```python
-python
-Copiar
-Editar
 class RepositoryData:
     def __init__(self, owner):
         self.owner = owner
@@ -91,9 +84,6 @@ Preparamos a classe com o nome do usuário ou organização. Pegamos o token do 
 
 ## etl/extractor.py - Pegando todos os repositórios (com paginação)
 ```python
-python
-Copiar
-Editar
 def list_all_repositories(self):
     if self._all_repos:
         return self._all_repos
@@ -119,9 +109,6 @@ Coletamos todos os repositórios do usuário página por página (até 100 por p
 
 ##etl/extractor.py - Criando DataFrame só com nome do repo e linguagem
 ```python
-python
-Copiar
-Editar
 def create_languages_df(self):
     repos = self.list_all_repositories()
     names = [repo.get('name') for repo in repos if repo.get('name')]
@@ -130,10 +117,7 @@ def create_languages_df(self):
 Explicação:
 Transformamos a lista de repositórios em um DataFrame contendo apenas o nome do repositório e a linguagem principal. Filtramos nomes que possam estar ausentes.
 
-uploader/uploader.py - Parte 1: Preparando uploader com autenticação
-python
-Copiar
-Editar
+#uploader/uploader.py - Preparando uploader com autenticação
 class RepositoryUploader:
     def __init__(self, username):
         self.username = username
@@ -151,9 +135,6 @@ Configuramos o uploader com o usuário, token e cabeçalhos necessários para ch
 
 ## uploader/uploader.py - Criando o repositório no GitHub
 ```python
-python
-Copiar
-Editar
 def create_repository(self, repo_name):
     url = f'{self.api_base_url}/user/repos'
     data = {'name': repo_name, 'description': 'Repositório com dados de linguagens.', 'private': False}
@@ -172,9 +153,6 @@ Tenta criar o repositório. Se ele já existe, apenas avisa. Se ocorrer outro er
 
 ## uploader/uploader.py - Enviando ou atualizando arquivo no repositório
 ```python
-python
-Copiar
-Editar
 def upload_file(self, repo_name, file_name, file_path):
     if not os.path.exists(file_path):
         print(f"Arquivo '{file_path}' não encontrado.")
